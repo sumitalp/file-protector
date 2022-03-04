@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block page_heading %}{% endblock %}
+{% block title %}File or URL Protector{% endblock %}
+
+{% block content %}
+
+	<h2>URL Detail:</h2>
+
+	<form method="post" action="{% url 'uploader:file-detail' hash=hash %}">
+		{% csrf_token %}
+	<table>
+        <tbody>
+            <tr>
+            <th>
+            <label for="id_password">Password:</label>
+        </th>
+            <td>
+                <input type="password" name="password" class="is-success is-medium" required="" id="id_password" autocomplete="off">
+            </td>
+        </tr>
+        </tbody>
+    </table>
+	<p><input type="submit" value="Submit" class="todo-button"></p>
+	</form>
+
+{% endblock %}

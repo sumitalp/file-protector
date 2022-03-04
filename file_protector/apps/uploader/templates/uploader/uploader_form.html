@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block page_heading %}{% endblock %}
+{% block title %}File or URL Protector{% endblock %}
+
+{% block content %}
+
+	<h2>URL:</h2>
+	{% comment %} {% if errors %}
+	<div class="alert alert-danger" role="alert">
+		{% for key, value in errors.items %}
+    		<p>{{ key }}: {{ value }}</p>
+		{% endfor %}
+	</div>
+	{% endif %} {% endcomment %}
+	<form action="/add/" method="post" id="generateHash" enctype='multipart/form-data'>
+		{% csrf_token %}
+	<table>{{ form }}</table>
+	<p><input type="submit" value="Submit" class="todo-button"></p>
+	</form>
+
+	<div id="newUrl">
+		{% if url %}
+		<p>URL: {{url}}</p>
+		{% endif %}
+		{% if password %}
+		<p>Password: {{password}}</p>
+		{% endif %}
+	</div>
+
+	{% comment %} <script type="text/javascript">
+		$('#generateHash').submit(function(e){
+			e.preventDefault();
+			ret = false;
+			$.ajax({
+			  method: "POST",
+			  url: "/add/",
+			  data: { 
+			  	title: $('#id_title').val(),
+                  uploaded_file: $('#id_uploaded_file').val(),
+                  uploaded_url: $('#id_uploaded_url').val(),
+			  	csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val()
+			  }
+			})
+			  .done(function( msg ) {
+			    $('#newUrl').html(
+					"<p>URL: "+msg.url+"</p>"+
+					"<p>Password: "+msg.password+"</p>"
+				);
+			    // $('#id_original_url').val('')
+			});
+			return ret;
+		})
+	</script>  {% endcomment %}
+
+{% endblock %}

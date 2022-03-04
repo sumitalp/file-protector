@@ -1,0 +1,53 @@
+version: "3"
+
+volumes:
+    db:
+
+services:
+  worker: &worker
+    build:
+      context: .
+      dockerfile: ./dockerfiles/local/Dockerfile
+    env_file:
+      - .env/.local/django
+    depends_on:
+      - db
+      - redis
+    command: celery -A file_protector worker -B -l debug
+    networks:
+      - default
+
+  web:
+    <<: *worker
+    volumes:
+      - ./media:/media
+      - ./file_protector:/app/file_protector
+      - ./pytest.ini:/app/pytest.ini
+    command: >
+      sh -c "urlwait &&
+               ./manage.py migrate &&
+               ./manage.py runserver 0.0.0.0:8000"
+    ports:
+      - "8100:8000"
+      - "587:587"
+    networks:
+      default:
+
+  db:
+    image: postgres:12
+    env_file:
+      - .env/.local/postgres
+    ports:
+      - "5435:5432"
+    volumes:
+      - db:/var/lib/postgresql/data/pgdata
+
+  redis:
+    image: redis:latest
+
+  nginx:
+    build: ./nginx
+    ports:
+      - 8100:80
+    depends_on:
+      - web

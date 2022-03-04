@@ -1,0 +1,7 @@
+ALLOWED_HOSTS="0.0.0.0,localhost,file-protector.herokuapp.com"
+DEBUG=True
+DATABASE_URL=postgres://ginger:ginger@db:5432/file_protector
+CORS_ORIGIN_ALLOW_ALL=True
+IPYTHONDIR=/app/.ipython
+CELERY_TASK_ALWAYS_EAGER=False
+REDIS_URL=redis://redis:6379

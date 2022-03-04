@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block page_heading %}{% endblock %}
+{% block title %}File or URL Protector{% endblock %}
+
+{% block content %}
+<h2>List of files or urls</h2>
+<div class="table-responsive">
+    <table class="table">
+        <thead>
+            <tr>
+              <th scope="col">Title</th>
+              <th scope="col">URL</th>
+            </tr>
+        </thead>
+        {% if object_list %}
+        <tbody>
+            {% for list in object_list%}
+            <tr>
+              <th scope="row">{{list.title}}</th>
+              <td><a href="{{list.generated_url}}" target="blank">{{list.generated_url}}</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        {% endif %}
+    </table>
+  </div>
+
+<nav aria-label="Page navigation example">
+    {% if object_list %}
+    <ul class="pagination">
+        {% if page_obj.has_previous %}
+        <li class="page-item"><a class="page-link" href="?page=1">First</a></li>
+        <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
+      {% endif %}
+      <li class="page-item">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.</li>
+      {% if page_obj.has_next %}
+      <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a></li>
+      <li class="page-item"><a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Last</a></li>
+      {% endif %}
+    </ul>
+    {% endif %}
+  </nav>
+{% endblock %}
