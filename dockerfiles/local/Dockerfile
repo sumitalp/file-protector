@@ -16,7 +16,7 @@ RUN apt-get -y update \
         libpq-dev gcc \
     && apt-get -y clean
 
-ADD ./requirements /app/requirements
+COPY ./requirements /app/requirements
 RUN apt-get update && apt-get install git -y && apt-get install iputils-ping -y
 RUN pip install -r /app/requirements/local.txt --no-cache-dir
 RUN pip install psycopg2
