@@ -1,7 +1,8 @@
 ALLOWED_HOSTS="0.0.0.0,localhost,file-protector.herokuapp.com"
 DEBUG=True
-DATABASE_URL=postgres://ginger:ginger@db:5432/file_protector
+DATABASE_URL=postgres://bwxnfbwdeffoks:eb0fc6c21699abedf0e1cab95668300f07bb749df3d033b7b4a92d2582953cb9@ec2-34-231-183-74.compute-1.amazonaws.com:5432/dcs11elso8mv9t
 CORS_ORIGIN_ALLOW_ALL=True
 IPYTHONDIR=/app/.ipython
 CELERY_TASK_ALWAYS_EAGER=False
 REDIS_URL=redis://redis:6379
+SECRET_KEY=0zi1p)t3sm$auzts2zff#45lf((s=0+io7v8^$sy-_xfn=qi=r--z!=hrj&abmtt!l2-v%n@6!1j8^fge*l@%3273-l&-n7#^z7*i
