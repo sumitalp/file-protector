@@ -16,6 +16,9 @@ class Uploader(TimeStampedModel):
     visited = models.PositiveBigIntegerField(default=0)
     correct_pass_counter = models.PositiveBigIntegerField(default=0)
 
+    class Meta:
+        ordering = ('-created',)
+
     def clean(self):
         super().clean()
         error_dict = {}
@@ -32,7 +35,6 @@ class Uploader(TimeStampedModel):
 
     def __str__(self) -> str:
         return self.title
-
 
 
 class VisitorHistory(TimeStampedModel):
