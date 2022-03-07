@@ -18,15 +18,21 @@ services:
       - default
 
   web:
-    <<: *worker
+#    <<: *worker
+    build:
+      context: .
+      dockerfile: ./dockerfiles/local/Dockerfile
+    env_file:
+        - .env/.local/django
     volumes:
       - ./media:/media
       - ./file_protector:/app/file_protector
       - ./pytest.ini:/app/pytest.ini
-    command: >
-      sh -c "urlwait &&
-               ./manage.py migrate &&
-               ./manage.py runserver 0.0.0.0:8000"
+#    command: >
+#      sh -c "urlwait &&
+#               ./manage.py migrate &&
+#               ./manage.py runserver 0.0.0.0:8000"
+    command: ./start
     ports:
       - "8100:8000"
       - "587:587"

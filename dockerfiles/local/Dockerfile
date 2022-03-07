@@ -17,13 +17,15 @@ RUN apt-get -y update \
     && apt-get -y clean
 
 RUN apt-get update && apt-get install git -y && apt-get install iputils-ping -y
+RUN useradd backend
+RUN chown -R backend:backend /app
+USER backend
+
 COPY ./requirements/base.txt /app/requirements/base.txt
 COPY ./requirements/local.txt /app/requirements/local.txt
 RUN pip install -r /app/requirements/local.txt --no-cache-dir
 RUN pip install psycopg2
 
 COPY . /app
-RUN useradd backend
-RUN chown -R backend:backend /app
-USER backend
+
 RUN ./manage.py collectstatic --no-input
