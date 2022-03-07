@@ -1,7 +1,8 @@
 import logging
-from datetime import timedelta
+from datetime import timedelta, datetime
 from django.conf import settings
-from django.db.models import F
+from django.db.models import F, Count, Q
+from django.db.models.functions import TruncDate
 from django.utils import timezone
 from django.shortcuts import get_object_or_404, redirect
 from rest_framework.response import Response
@@ -9,7 +10,7 @@ from rest_framework.generics import CreateAPIView, ListAPIView
 from rest_framework.permissions import IsAuthenticated
 from file_protector.apps.uploader.models import Uploader, VisitorHistory
 
-from file_protector.apps.uploader.serializers import PasswordSerializer, UploaderSerializer
+from file_protector.apps.uploader.serializers import PasswordSerializer, UploaderSerializer, UploaderVisitorSerializer
 
 logger = logging.getLogger(__name__)
 
@@ -57,3 +58,45 @@ class UploaderRetrieveAPIView(CreateAPIView):
             return redirect(link)
         
         return Response({"detail": "Link has expired."})
+
+
+class ResourceAggregatorAPIView(ListAPIView):
+    permission_classes = (IsAuthenticated,)
+    serializer_class = None
+
+    def get_queryset(self):
+        return VisitorHistory.objects.filter(
+            Q(created__date__range=[datetime.today()-timedelta(days=7), datetime.today()])
+        )
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            customized_data = self.__custom_response__(page)
+            return self.get_paginated_response(customized_data)
+
+        customized_data = self.__custom_response__(queryset)
+        return Response(customized_data)
+
+    def __custom_response__(self, data_obj):
+        date_wise_data = self.__prepare_dict__(data_obj)
+        for d in data_obj:
+            if d.uploader.uploaded_file:
+                date_wise_data[str(d.created.date())]["files"] += 1
+            if d.uploader.uploaded_url:
+                date_wise_data[str(d.created.date())]["links"] += 1
+
+        return date_wise_data
+
+    def __prepare_dict__(self, data_obj):
+        date_dict = dict()
+        for d in data_obj:
+            if d.created not in date_dict:
+                date_dict[str(d.created.date())] = {
+                    "files": 0, "links": 0
+                }
+
+        return date_dict
+

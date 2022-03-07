@@ -41,5 +41,8 @@ class VisitorHistory(TimeStampedModel):
     uploader = models.ForeignKey(Uploader, related_name="visitors", on_delete=CASCADE)
     agent = models.TextField()
 
+    class Meta:
+        ordering = ('-created',)
+
     def __str__(self) -> str:
         return self.uploader.title

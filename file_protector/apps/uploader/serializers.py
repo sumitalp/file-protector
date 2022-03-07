@@ -4,7 +4,7 @@ from rest_framework import serializers
 from rest_framework.serializers import ModelSerializer
 from password_generator import PasswordGenerator
 
-from file_protector.apps.uploader.models import Uploader
+from file_protector.apps.uploader.models import Uploader, VisitorHistory
 from file_protector.apps.uploader.utils import StringShortener
 
 
@@ -32,3 +32,9 @@ class PasswordSerializer(ModelSerializer):
     class Meta:
         model = Uploader
         fields = ["password"]
+
+
+class UploaderVisitorSerializer(ModelSerializer):
+    class Meta:
+        model = VisitorHistory
+        fields = ['uploader']
