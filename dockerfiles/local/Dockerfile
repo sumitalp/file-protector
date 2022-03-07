@@ -1,4 +1,6 @@
 FROM python:3.8.4-slim
+
+RUN mkdir /app
 WORKDIR /app
 
 ENV PYTHONUNBUFFERED=1
@@ -17,8 +19,8 @@ RUN apt-get -y update \
     && apt-get -y clean
 
 RUN apt-get update && apt-get install git -y && apt-get install iputils-ping -y
-COPY requirements/base.txt /app/requirements/base.txt
-COPY requirements/local.txt /app/requirements/local.txt
+COPY ./requirements/base.txt /app/requirements/base.txt
+COPY ./requirements/local.txt /app/requirements/local.txt
 RUN pip install -r /app/requirements/local.txt --no-cache-dir
 RUN pip install psycopg2
 

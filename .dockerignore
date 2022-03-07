@@ -7,6 +7,5 @@ build
 *.md
 __pycache__
 **/*.pyc
-dockerfiles
 web
 */node_modules
