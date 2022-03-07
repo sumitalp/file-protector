@@ -81,22 +81,16 @@ class ResourceAggregatorAPIView(ListAPIView):
         return Response(customized_data)
 
     def __custom_response__(self, data_obj):
-        date_wise_data = self.__prepare_dict__(data_obj)
+        date_wise_data = dict()
         for d in data_obj:
-            if d.uploader.uploaded_file:
-                date_wise_data[str(d.created.date())]["files"] += 1
-            if d.uploader.uploaded_url:
-                date_wise_data[str(d.created.date())]["links"] += 1
-
-        return date_wise_data
-
-    def __prepare_dict__(self, data_obj):
-        date_dict = dict()
-        for d in data_obj:
-            if d.created not in date_dict:
-                date_dict[str(d.created.date())] = {
+            date_string = str(d.created.date())
+            if date_string not in date_wise_data:
+                date_wise_data[date_string] = {
                     "files": 0, "links": 0
                 }
+            if d.uploader.uploaded_file:
+                date_wise_data[date_string]["files"] += 1
+            if d.uploader.uploaded_url:
+                date_wise_data[date_string]["links"] += 1
 
-        return date_dict
-
+        return date_wise_data
