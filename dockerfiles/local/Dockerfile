@@ -18,9 +18,7 @@ RUN apt-get -y update \
     && apt-get -y clean
 
 RUN apt-get update && apt-get install git -y && apt-get install iputils-ping -y
-#COPY ./requirements/base.txt /app/requirements/base.txt
-#COPY ./requirements/local.txt /app/requirements/local.txt
-COPY . /app
+ADD ./requirements/* /app/requirements/*
 RUN pip install -r /app/requirements/local.txt --no-cache-dir
 RUN pip install psycopg2
 
