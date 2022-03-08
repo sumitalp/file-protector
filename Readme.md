@@ -44,8 +44,12 @@ Go to project folder and run
 ## Project urls
 - For apis: `http://localhost:8100/`
 
-## Documents urls
-- For apis: `http://localhost:8100/docs/`
+## Report url
+- URL shows last 7 days data (if GET parameters not provided): `http://localhost:8100/report/`
+- URL shows date range data (if GET parameters provided): `http://localhost:8100/report/?start_date=2022-03-01&end_date=2022-03-03`
+
+## Live URL
+- `https://file-protector.herokuapp.com/`
 
 
 ## Improvements

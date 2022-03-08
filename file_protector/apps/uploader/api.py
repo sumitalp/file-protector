@@ -65,8 +65,17 @@ class ResourceAggregatorAPIView(ListAPIView):
     serializer_class = None
 
     def get_queryset(self):
+        start_date = self.request.GET.get("start_date", "")
+        end_date = self.request.GET.get("end_date", "")
+        if not start_date and not end_date:
+            start_date = datetime.today()-timedelta(days=7)
+            end_date = datetime.today()
+        else:
+            start_date = datetime.strptime(start_date, "%Y-%m-%d")
+            end_date = datetime.strptime(end_date, "%Y-%m-%d")
+
         return VisitorHistory.objects.filter(
-            Q(created__date__range=[datetime.today()-timedelta(days=7), datetime.today()])
+            Q(created__date__range=[start_date, end_date])
         )
 
     def list(self, request, *args, **kwargs):
